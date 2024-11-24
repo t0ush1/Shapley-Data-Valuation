@@ -18,7 +18,7 @@ mkfigs/figs
 mkfigs/*.zip
 pre_experiment/comp_A100_RTX3090
 
-*/__pycache__/*
+**/__pycache__
 htr_test
 example_learn
 pre_experiment
@@ -27,4 +27,5 @@ sources/datasets/adult
 sources/one_fl_scheme.bk
 sources/fed_xgboost/test.py
 sources/fed_xgboost/main.py
+sources/fed_xgboost/*.rec
 sources/helper_alg_backup.py
