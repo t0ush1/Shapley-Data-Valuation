@@ -25,6 +25,6 @@ pre_experiment
 sources/datasets/raw
 sources/datasets/adult
 sources/one_fl_scheme.bk
-fed_xgboost/test.py
-fed_xgboost/main.py
+sources/fed_xgboost/test.py
+sources/fed_xgboost/main.py
 sources/helper_alg_backup.py

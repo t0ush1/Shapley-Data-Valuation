@@ -5,7 +5,7 @@ from xgb_server import run_server
 from xgb_client import run_client
 
 cnum = 10
-DATAPATH = f"/home/hetianran/code/TKDE-SHAP-main/sources/datasets/adult/client_{cnum}_same/"
+DATAPATH = f"../datasets/adult/client_{cnum}_same/"
 PARAMS = {
     "booster": "gbtree",
     "objective": "binary:logistic",
