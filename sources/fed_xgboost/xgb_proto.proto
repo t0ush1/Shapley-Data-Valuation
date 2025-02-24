@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package xgb_package;
+
+service BoosterService {
+    rpc get_booster (bst_request) returns (bst_reply) {}
+}
+
+service StopService {
+    rpc stop (stop_request) returns (stop_reply) {}
+}
+
+message bst_request {
+    bytes raw_booster=1;
+}
+
+message bst_reply {
+    bytes raw_booster=1;
+}
+
+message stop_request {
+}
+
+message stop_reply {
+}
