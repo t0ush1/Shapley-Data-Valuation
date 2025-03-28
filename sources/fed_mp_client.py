@@ -53,7 +53,7 @@ class grad_descent_servicer(fed_proto_pb2_grpc.GradDescentServiceServicer):
         self.local_round = _args.local_round
         self.rec_grad = _args.rec_grad
         # print("arg.rec_grad={}, self.rec_grad={}".format(_args.rec_grad, self.rec_grad))
-        self.local_batch = 16 if _args.dataset != "sent140" else 64
+        self.local_batch = 16 if _args.dataset not in ["sent140", "chengdu"] else 64
         self.global_round = 0 # record the global round we are in.
         self.args = _args
 
@@ -116,8 +116,8 @@ def run_fed_client(_args):
     file_client_trainY = open(data_path+'client_trainY_'+str(cid)+'.pk', 'rb')
     client_trainX = pk.load(file_client_trainX)
     client_trainY = pk.load(file_client_trainY)
-    # client_trainX = client_trainX[:client_trainX.shape[0]//2]
-    # client_trainY = client_trainY[:client_trainY.shape[0]//2]
+    client_trainX = client_trainX[:client_trainX.shape[0]//2]
+    client_trainY = client_trainY[:client_trainY.shape[0]//2]
     client_dataset = (client_trainX, client_trainY)
 
     # if OUPUT_INFO:

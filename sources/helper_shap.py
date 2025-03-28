@@ -176,7 +176,10 @@ def create_trunc_multi_round(client_num, now_round, fed_round, args):
               
          sub_model_weights = deepcopy(temp)
          global_model.model_load_weights(sub_model_weights)
-         test_loss, test_acc = global_model.model_get_eval(testX, testY, notes=str(now_round))
+         if args_dataset == "chengdu":
+            test_loss, test_acc = global_model.model_get_eval(testX, testY, notes=str(now_round)), 0
+         else:
+            test_loss, test_acc = global_model.model_get_eval(testX, testY, notes=str(now_round))
 
          end_time = time.perf_counter()
 

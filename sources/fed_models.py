@@ -24,7 +24,8 @@ LOCAL_EPOCH = 5
 LOCAL_BATCH = 64
 
 
-FED_SHAPE_DICT = {"emnist":((28,28), 10), "mnist":((28,28), 10), "celeba":((84,84,3), 2), "adult":((14,), 2), "adult_onehot":((105,), 2), "covtype": ((54,), 7), "census": ((41,), 2), "sent140": ((30,), 2)}
+FED_SHAPE_DICT = {"emnist":((28,28), 10), "mnist":((28,28), 10), "celeba":((84,84,3), 2), "adult":((14,), 2), "adult_onehot":((105,), 2),
+                  "covtype": ((54,), 7), "census": ((41,), 2), "sent140": ((30,), 2), "chengdu": ((10, 2), 2)}
 
 
 def nparray_to_rpcio(nparray):
@@ -222,7 +223,7 @@ class lstm_model(basic_model):
         self.model_compile()
 
 
-class mlpnlpmodel(basic_model):
+class mlpnlp_model(basic_model):
     def  __init__(self, _input, _output):
         self.input = _input
         self.output = _output
@@ -239,4 +240,35 @@ class mlpnlpmodel(basic_model):
         self.model_compile()
 
 
-FED_MODEL_DICT = {"cnn_model":cnn_model, "linear_model":linear_model, "cnnrgb_model":cnnrgb_model, "cnn1d_model":cnn1d_model, "lstm_model":lstm_model, "mlpnlp_model":mlpnlpmodel}
+class lstmtraj_model(basic_model):
+    def  __init__(self, _input, _output):
+        self.input = _input
+        self.output = _output
+        self.model_type = "LSTM Traj Model"
+        super().__init__(self.input, self.output, self.model_type)
+        self.model = tf.keras.Sequential([
+            tf.keras.layers.LSTM(64, dropout=0.2, input_shape=_input),
+            tf.keras.layers.Dense(32, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(0.01)),
+            tf.keras.layers.Dense(_output)
+        ])
+        self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4), loss="mse")
+
+
+class mlptraj_model(basic_model):
+    def __init__(self, _input, _output):
+        self.input = _input
+        self.output = _output
+        self.model_type = "MLP Traj Model"
+        super().__init__(self.input, self.output, self.model_type)
+        self.model = tf.keras.Sequential([
+            tf.keras.layers.Flatten(input_shape=_input),
+            tf.keras.layers.Dense(64, activation="relu"),
+            tf.keras.layers.Dense(32, activation="relu"),
+            tf.keras.layers.Dropout(0.2),
+            tf.keras.layers.Dense(_output)
+        ])       
+        self.model.compile(optimizer="adam", loss="mse")
+
+
+FED_MODEL_DICT = {"cnn_model":cnn_model, "linear_model":linear_model, "cnnrgb_model":cnnrgb_model, "cnn1d_model":cnn1d_model,
+                  "lstm_model":lstm_model, "mlpnlp_model":mlpnlp_model, "lstmtraj_model":lstmtraj_model, "mlptraj_model":mlptraj_model}

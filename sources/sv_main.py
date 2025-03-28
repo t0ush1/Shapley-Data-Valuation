@@ -90,7 +90,7 @@ def exp_on_real_datasets(train_Setups = ['same'], datasets = ['emnist'], client_
                                 pre_res = pickle.load(fin)
 
                         for alg_name, alg_func in algs.items():
-                            if alg_name != "OR":
+                            if alg_name != "Light Sampling":
                                 algs_res[alg_name] = pre_res[alg_name]
                                 continue
                             if alg_name in def_shap:
@@ -99,29 +99,35 @@ def exp_on_real_datasets(train_Setups = ['same'], datasets = ['emnist'], client_
                                     algs_res[alg_name] = (acc, acc_time)
                                 else:
                                     acc, loss, acc_time, loss_time = alg_func(rec_sample_res, cnum)
-                                    algs_res[alg_name] = (acc, acc_time)
+                                    # algs_res[alg_name] = (acc, acc_time)
+                                    algs_res[alg_name] = (loss, loss_time)
                             
                             if alg_name in grad_shap:
                                 acc, loss, acc_time, loss_time = alg_func(cnum, (dataset, mod, set_up))
-                                algs_res[alg_name] = (acc, acc_time)
+                                # algs_res[alg_name] = (acc, acc_time)
+                                algs_res[alg_name] = (loss, loss_time)
                             
                             if alg_name in samp_shap:
                                 if alg_name == 'Extended-TMC':
                                     acc, loss, acc_time, loss_time = alg_func(rec_sample_res, cnum, samp_rds//cnum)
-                                    algs_res[alg_name] = (acc, acc_time)
+                                    # algs_res[alg_name] = (acc, acc_time)
+                                    algs_res[alg_name] = (loss, loss_time)
                                 if alg_name == 'Extended-GTB':
                                     acc, loss, acc_time, loss_time = alg_func(rec_sample_res, cnum, samp_rds)
-                                    algs_res[alg_name] = (acc, acc_time)
+                                    # algs_res[alg_name] = (acc, acc_time)
+                                    algs_res[alg_name] = (loss, loss_time)
                                 if alg_name == 'CC-Shapley':
                                     acc, loss, acc_time, loss_time = alg_func(rec_sample_res, cnum, samp_rds // 2)
-                                    algs_res[alg_name] = (acc, acc_time)
+                                    # algs_res[alg_name] = (acc, acc_time)
+                                    algs_res[alg_name] = (loss, loss_time)
                             if alg_name in ligh_shap:
                                 acc, loss, acc_time, loss_time = alg_func(rec_sample_res, cnum, samp_rds)
-                                algs_res[alg_name] = (acc, acc_time)
+                                # algs_res[alg_name] = (acc, acc_time)
+                                algs_res[alg_name] = (loss, loss_time)
 
                         with open(exp_path+exp_name, 'wb') as fout:
                             pickle.dump(algs_res, fout)
-                        print(exp_path+exp_name,'\n', algs_res)
+                        # print(exp_path+exp_name,'\n', algs_res)
                     
         # pass
 
@@ -139,5 +145,5 @@ if __name__ == "__main__":
 
         # exp_on_real_datasets(train_Setups = ['same', 'mixDtr', 'mixSize', 'noiseX', 'noiseY'], datasets = ['mnist'], client_nums = [10], used_models = ['cnn_model'])
         # exp_on_real_datasets(train_Setups = ['same'], datasets = ['mnist'], client_nums = [3], used_models = ['linear_model'], times = 5)
-        exp_on_real_datasets(train_Setups = ['same'], datasets = ['sent140'], client_nums = [10], used_models = ['lstm_model'])
+        exp_on_real_datasets(train_Setups = ['same'], datasets = ['chengdu'], client_nums = [10], used_models = ['lstmtraj_model'])
 

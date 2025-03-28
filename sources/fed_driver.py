@@ -122,15 +122,15 @@ if __name__ == "__main__":
     exist_setup_names = [args.train_setup]
 
     if TEST_MODE:
-        local_round = [2]
-        global_round= [4]
+        local_round = [1]
+        global_round= [2]
         CNUM = 3
         rec_sample = [0]
         # rec_sample = [i for i in range(CNUM)]
 
         # create_sample_data_mp(dataset='emnist', model="cnn_model", client_num=CNUM, 
         #                 local_round=local_round[0], rec_sample=[i for i in range(CNUM)], fed_round=global_round[0])
-        create_sample_data_mp(dataset='adult', model="linear_model", client_num=CNUM, 
+        create_sample_data_mp(dataset='chengdu', model="lstmtraj_model", client_num=CNUM, 
                         local_round=local_round[0], rec_sample=rec_sample, fed_round=global_round[0], tmr_flag=0, setup='same')
     # # [i for i in range(CNUM)]
     elif args.all_gpu == -1:

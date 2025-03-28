@@ -155,10 +155,14 @@
 # python fed_driver.py --model='linear_model' --global_round=4 --local_round=2 --dataset='mnist' --client_num=6 --train_setup='same'
 # python fed_driver.py --model='linear_model' --global_round=4 --local_round=2 --dataset='mnist' --client_num=10 --train_setup='same'
 
-python fed_driver.py --model='lstm_model' --global_round=2 --local_round=1 --dataset='sent140' --client_num=10 --train_setup='same'
+# python fed_driver.py --model='lstm_model' --global_round=2 --local_round=1 --dataset='sent140' --client_num=10 --train_setup='same'
 
 # python fed_driver.py --model='mlpnlp_model' --global_round=2 --local_round=1 --dataset='sent140' --client_num=3 --train_setup='same'
 # python fed_driver.py --model='mlpnlp_model' --global_round=2 --local_round=1 --dataset='sent140' --client_num=6 --train_setup='same'
 # python fed_driver.py --model='mlpnlp_model' --global_round=2 --local_round=1 --dataset='sent140' --client_num=10 --train_setup='same'
 
-CUDA_VISIBLE_DEVICES=3 python sv_main.py
+# CUDA_VISIBLE_DEVICES=3 python sv_main.py
+
+python fed_driver.py --model='lstmtraj_model' --global_round=2 --local_round=1 --dataset='chengdu' --client_num=3 --train_setup='same'
+# python fed_driver.py --model='lstmtraj_model' --global_round=2 --local_round=1 --dataset='chengdu' --client_num=6 --train_setup='same'
+# python fed_driver.py --model='lstmtraj_model' --global_round=2 --local_round=1 --dataset='chengdu' --client_num=10 --train_setup='same'

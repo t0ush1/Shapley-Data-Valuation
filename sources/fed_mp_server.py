@@ -78,6 +78,8 @@ def run_fed_server(_args, _basic_port=BASIC_PORT):
     file_testY = open(data_path+'testY.pk', 'rb')
     testX = pk.load(file_testX)
     testY = pk.load(file_testY)
+    testX = testX[:testX.shape[0]//2]
+    testY = testY[:testY.shape[0]//2]
 
     # Globally train the federated model, i.e. execute the stub.grad_decendent
     print("# Globally train the federated model, i.e. execute the stub.grad_decendent.")
@@ -86,7 +88,10 @@ def run_fed_server(_args, _basic_port=BASIC_PORT):
 
     # Check whether the subset of client is []
     if len(_sample_client)==0:
-        test_loss, test_acc = global_model.model_get_eval(testX, testY)
+        if _args.dataset == "chengdu":
+            test_loss, test_acc = global_model.model_get_eval(testX, testY), 0
+        else:
+            test_loss, test_acc = global_model.model_get_eval(testX, testY)
         # stop_stus = fed_proto_pb2_grpc.stop_serverStub(grpc.insecure_channel("localhost:"+str(STOP_PORT)))
         # stop_stus.stop(fed_proto_pb2.stop_request(message="simplex"))
         return test_acc, test_loss        
@@ -144,7 +149,10 @@ def run_fed_server(_args, _basic_port=BASIC_PORT):
         global_model_weights = deepcopy(temp)
         # test the performance of global model.
         global_model.model_load_weights(global_model_weights)
-        test_loss, test_acc = global_model.model_get_eval(testX, testY)
+        if _args.dataset == "chengdu":
+            test_loss, test_acc = global_model.model_get_eval(testX, testY), 0
+        else:
+            test_loss, test_acc = global_model.model_get_eval(testX, testY)
         print("Subset<-{}: Round#{}#, Acc:{}, Loss:{}".format(_sample_client, now_round, test_acc, test_loss))
 
         
@@ -156,7 +164,10 @@ def run_fed_server(_args, _basic_port=BASIC_PORT):
         stop_req.stop(fed_proto_pb2.stop_request(message="simplex"))
     
     # record the loss and acc
-    test_loss, test_acc = global_model.model_get_eval(testX, testY)
+    if _args.dataset == "chengdu":
+        test_loss, test_acc = global_model.model_get_eval(testX, testY), 0
+    else:
+        test_loss, test_acc = global_model.model_get_eval(testX, testY)
     return test_acc, test_loss
 
 if __name__ == "__main__":

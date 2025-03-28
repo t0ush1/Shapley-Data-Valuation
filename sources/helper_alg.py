@@ -261,7 +261,7 @@ def TMC_SHAP(rec_sample, client_num, sample_round=30, ouput_flag=True):
     shapley_value_loss, cost_time_loss = comp(rec_sample, client_num, 'loss', min(2**client_num, sample_round))
 
     if ouput_flag:
-        print("TMC shapley Value ({}):".format(cost_time_acc), '\n', shapley_value_acc, '\n', shapley_value_loss)        
+        print("TMC shapley Value ({} {}):".format(cost_time_acc, cost_time_loss), '\n', shapley_value_acc, '\n', shapley_value_loss)        
 
     return shapley_value_acc, shapley_value_loss, cost_time_acc, cost_time_loss     
 
@@ -549,7 +549,10 @@ def OR_SHAP(client_num, file_para):
             
             # compute the approx accuaracy and loss
             global_model.model_load_weights(subset_global_weights)
-            subset_loss, subset_acc = global_model.model_get_eval(testX, testY)
+            if dataset == "chengdu":
+                subset_loss, subset_acc = global_model.model_get_eval(testX, testY), 0
+            else:
+                subset_loss, subset_acc = global_model.model_get_eval(testX, testY)
             print("#subset={}#  acc={}, loss={}".format(subset, subset_acc, subset_loss))
             # print('_______', stop)
             end_time = time.perf_counter()
@@ -605,17 +608,19 @@ def GTG_SHAP(client_num, file_para):
 
     shapley_value_acc = [0 for i in range(client_num)]
     shapley_value_loss =[0 for i in range(client_num)]
-    time_cost = 0
+    cost_time_loss = 0
+    cost_time_acc = 0
     for round in range(len(tmr_rec)):
         # rsv_acc, rsv_loss, rsv_time, _ = DEF_SHAP(tmr_rec[round], client_num)
-        rsv_acc, rsv_loss, rsv_time, _ = TMC_SHAP(tmr_rec[round], client_num, int(max(math.sqrt(2**client_num), 5)), False)
+        rsv_acc, rsv_loss, rsv_time_acc, rsc_time_loss = TMC_SHAP(tmr_rec[round], client_num, int(max(math.sqrt(2**client_num), 5)), False)
         for cid in range(client_num): 
             shapley_value_acc[cid] += rsv_acc[cid]
         for cid in range(client_num):
             shapley_value_loss[cid]+= rsv_loss[cid]
-        time_cost += rsv_time
-    print("GTG shapley Value ({}):".format(time_cost), '\n', shapley_value_acc, '\n', shapley_value_loss)        
-    return shapley_value_acc, shapley_value_loss, time_cost, time_cost
+        cost_time_acc += rsv_time_acc
+        cost_time_loss += rsc_time_loss
+    print("GTG shapley Value ({} {}):".format(cost_time_acc, cost_time_loss), '\n', shapley_value_acc, '\n', shapley_value_loss)        
+    return shapley_value_acc, shapley_value_loss, cost_time_acc, cost_time_loss
 
 def CC_SHAP(rec_sample, client_num, sample_round=150, output_flag=True):
     # compute the shapley value by complementary contributions
